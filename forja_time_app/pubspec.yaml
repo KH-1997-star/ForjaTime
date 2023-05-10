@@ -39,6 +39,7 @@ dependencies:
   flutter_bloc: ^8.1.2
   flutterfire_ui: ^0.4.3+20
   font_awesome_flutter: ^10.4.0
+  google_sign_in: ^5.4.4
 
 dev_dependencies:
 
