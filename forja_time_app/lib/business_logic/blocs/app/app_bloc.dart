@@ -43,7 +43,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     AppLogoutRequested event,
     Emitter<AppState> emit,
   ) {
-    unawaited(_authRepository.logOut());
+    unawaited(
+      event.fromGoogle
+          ? _authRepository.googleLogOut()
+          : _authRepository.logOut(),
+    );
   }
 
   @override

@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "204251743519-ib7tj7sv7d6j19vjo9n7vhcg6mli0afe.apps.googleusercontent.com",
+          "client_id": "204251743519-9tccf2sfc2tf8qvu4couk3vge2bihpmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.forja_time_app",
+            "certificate_hash": "7893f055063ab6fb9d8d2a94ee81a16ba2045aa7"
+          }
+        },
+        {
+          "client_id": "204251743519-8gi6cbmj03fcm5fqefnvb31kkeplh1ja.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "204251743519-ib7tj7sv7d6j19vjo9n7vhcg6mli0afe.apps.googleusercontent.com",
+              "client_id": "204251743519-8gi6cbmj03fcm5fqefnvb31kkeplh1ja.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

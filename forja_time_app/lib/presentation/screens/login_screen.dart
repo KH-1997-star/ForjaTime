@@ -44,6 +44,8 @@ class LoginForm extends StatelessWidget {
           _LoginButton(),
           const SizedBox(height: 8),
           _SignupButton(),
+          const SizedBox(height: 8),
+          _LoginWithGoogleButton()
         ],
       ),
     );
@@ -107,12 +109,34 @@ class _LoginButton extends StatelessWidget {
   }
 }
 
+class _LoginWithGoogleButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status == LoginStatus.submitting
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  fixedSize: const Size(200, 40),
+                ),
+                onPressed: () {
+                  context.read<LoginCubit>().logInWithGoogleCredentials();
+                },
+                child: const Text('LOGIN with google'),
+              );
+      },
+    );
+  }
+}
+
 class _SignupButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        primary: Colors.white,
+        backgroundColor: Colors.white,
         fixedSize: const Size(200, 40),
       ),
       onPressed: () => Navigator.of(context).push<void>(SignupScreen.route()),
