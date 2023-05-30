@@ -56,13 +56,19 @@ class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.email != current.email,
+      buildWhen: (previous, current) =>
+          previous.email != current.email ||
+          current.status == LoginStatus.error,
       builder: (context, state) {
         return TextField(
           onChanged: (email) {
             context.read<LoginCubit>().emailChanged(email);
           },
-          decoration: const InputDecoration(labelText: 'email'),
+          decoration: InputDecoration(
+            labelText: 'email',
+            errorText:
+                state.emailErrorMessage == '' ? null : state.emailErrorMessage,
+          ),
         );
       },
     );
@@ -73,13 +79,20 @@ class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          current.status == LoginStatus.error,
       builder: (context, state) {
-        return TextField(
+        return TextFormField(
           onChanged: (password) {
             context.read<LoginCubit>().passwordChanged(password);
           },
-          decoration: const InputDecoration(labelText: 'password'),
+          decoration: InputDecoration(
+            labelText: 'password',
+            errorText: state.passwordErrorMessage == ''
+                ? null
+                : state.passwordErrorMessage,
+          ),
           obscureText: true,
         );
       },
@@ -100,7 +113,16 @@ class _LoginButton extends StatelessWidget {
                   fixedSize: const Size(200, 40),
                 ),
                 onPressed: () {
-                  context.read<LoginCubit>().logInWithCredentials();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  context
+                      .read<LoginCubit>()
+                      .logInWithCredentials()
+                      .then((value) {
+                    if (state.otherError != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.otherError!)));
+                    }
+                  });
                 },
                 child: const Text('LOGIN'),
               );
@@ -122,7 +144,16 @@ class _LoginWithGoogleButton extends StatelessWidget {
                   fixedSize: const Size(200, 40),
                 ),
                 onPressed: () {
-                  context.read<LoginCubit>().logInWithGoogleCredentials();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  context
+                      .read<LoginCubit>()
+                      .logInWithGoogleCredentials()
+                      .then((value) {
+                    if (state.otherError != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.otherError!)));
+                    }
+                  });
                 },
                 child: const Text('LOGIN with google'),
               );

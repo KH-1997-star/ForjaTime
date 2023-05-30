@@ -57,13 +57,19 @@ class _EmailInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.email != current.email,
+      buildWhen: (previous, current) =>
+          previous.email != current.email ||
+          current.status == SignupStatus.error,
       builder: (context, state) {
         return TextField(
           onChanged: (email) {
             context.read<SignupCubit>().emailChanged(email);
           },
-          decoration: const InputDecoration(labelText: 'email'),
+          decoration: InputDecoration(
+            labelText: 'email',
+            errorText:
+                state.emailErrorMessage == '' ? null : state.emailErrorMessage,
+          ),
         );
       },
     );
@@ -74,13 +80,20 @@ class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignupCubit, SignupState>(
-      buildWhen: (previous, current) => previous.password != current.password,
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          current.status == SignupStatus.error,
       builder: (context, state) {
         return TextField(
           onChanged: (password) {
             context.read<SignupCubit>().passwordChanged(password);
           },
-          decoration: const InputDecoration(labelText: 'password'),
+          decoration: InputDecoration(
+            labelText: 'password',
+            errorText: state.passwordErrorMessage == ''
+                ? null
+                : state.passwordErrorMessage,
+          ),
           obscureText: true,
         );
       },
@@ -98,11 +111,16 @@ class _SignupButton extends StatelessWidget {
             ? const CircularProgressIndicator()
             : ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                   fixedSize: const Size(200, 40),
                 ),
                 onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   context.read<SignupCubit>().signupFormSubmitted();
+                  if (state.otherError != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.otherError!)));
+                  }
                 },
                 child: const Text(
                   'SIGN UP',
